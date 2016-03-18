@@ -37,23 +37,7 @@ class DataTableView: UITableViewController{
 
     func tableData(){
         //Retrieve data from Local Storage
-        tableView.reloadData()
-        let store = NSUserDefaults.standardUserDefaults()
-        let json = store.arrayForKey("jsonData")
-        if json != nil{
-            let data = JSON(json!)
-            for result in data.arrayValue {
-                let date = result["date"].stringValue
-                let weight = result["weight"].stringValue
-                let height = result["height"].stringValue
-                let bmi =  result["bmi"].stringValue
-                let obj = ["date": date,"weight": weight, "height": height, "bmi": bmi]
-                tableObjects.append(obj)
-            }
-            
-        }else{
-            displayMyAlertMessage("There is no data to display")
-        }
+        
        
     }
     
@@ -72,48 +56,18 @@ class DataTableView: UITableViewController{
     
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCellWithIdentifier("labelCell", forIndexPath: indexPath)
-        let object = tableObjects[indexPath.row]
-        cell.textLabel!.text = object["date"]
-        cell.detailTextLabel!.text = "Weight: \(object["weight"]!), Height: \(object["height"]!), BMI: \(object["bmi"]!)"
+        
         return cell
     }
     override
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         
-        print("You selected cell #\(indexPath.row)!")
-    }
-    
-    override func tableView(tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        let  headerCell:UITableViewCell = self.tableView.dequeueReusableCellWithIdentifier("labelCell")! as UITableViewCell
-        headerCell.backgroundColor = UIColor.blueColor()
-        headerCell.textLabel!.textColor = UIColor.whiteColor()
-        headerCell.textLabel!.text = ""
-        headerCell.detailTextLabel!.text = ""
-        return headerCell
+        
     }
     
     
     func animateTable() {
-        tableView.reloadData()
         
-        let cells = tableView.visibleCells
-        let tableHeight: CGFloat = tableView.bounds.size.height
-        
-        for i in cells {
-            let cell: UITableViewCell = i as UITableViewCell
-            cell.transform = CGAffineTransformMakeTranslation(0, tableHeight)
-        }
-        
-        var index = 0
-        
-        for a in cells {
-            let cell: UITableViewCell = a as UITableViewCell
-            UIView.animateWithDuration(1.5, delay: 0.05 * Double(index), usingSpringWithDamping: 0.8, initialSpringVelocity: 0, options: UIViewAnimationOptions.CurveEaseIn, animations: {
-                cell.transform = CGAffineTransformMakeTranslation(0, 0);
-                }, completion: nil)
-            
-            index += 1
-        }
     }
     
     
