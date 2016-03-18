@@ -24,6 +24,7 @@ class ViewController: UIViewController{
     @IBOutlet weak var lineChartView: LineChartView!
     let healthKitStore:HKHealthStore = HKHealthStore()
     
+    let store = NSUserDefaults.standardUserDefaults()
     
     var cellDescriptors: NSMutableArray!
     var visibleRowsPerSection = [[Int]]()
@@ -52,6 +53,7 @@ class ViewController: UIViewController{
             self.view.addGestureRecognizer(self.revealViewController().panGestureRecognizer())
         }
         self.revealViewController().rearViewRevealWidth = 190
+        store.removeObjectForKey("jsonData")
         //Calling the function that makes HealthKit authorization request
         authorizeHealthKit()
         self.welcome()
@@ -69,7 +71,7 @@ class ViewController: UIViewController{
         self.navigationItem.setRightBarButtonItems([plusButtonItem,shareBarButtonItem], animated: true)
         
         //Retrieving the content of the mongo database via node.js
-        let urlString = "http://dev.cs.smu.ca:4551/retrieve"
+        let urlString = "http://nodeTrial.mybluemix.net/retrieve"
         
         
         if let url = NSURL(string: urlString){
@@ -170,7 +172,7 @@ class ViewController: UIViewController{
             
             
             
-            let myURL:NSURL = NSURL(string: "http://dev.cs.smu.ca:4551/store")!
+            let myURL:NSURL = NSURL(string: "http://nodeTrial.mybluemix.net/store")!
             let request = NSMutableURLRequest(URL: myURL);
             request.HTTPMethod = "POST"
             request.HTTPBody = postString.dataUsingEncoding(NSUTF8StringEncoding)!
@@ -248,8 +250,6 @@ class ViewController: UIViewController{
     }
     
     func parseJSON(json: JSON){
-        let store = NSUserDefaults.standardUserDefaults()
-        store.removeObjectForKey("jsonData")
         if(json == []){
             self.notificationText.hidden = false
             self.notificationText.text = "Click on the plus sign to add your bmi data."
@@ -265,7 +265,6 @@ class ViewController: UIViewController{
             objects.append(obj)
             bmiValue.append(result["bmi"].doubleValue)
             dateValue.append(dateV)
-            let store = NSUserDefaults.standardUserDefaults()
             store.setObject(objects, forKey: "jsonData");
             store.synchronize()
             
