@@ -25,6 +25,7 @@ class DataTableView: UITableViewController{
             menuButton.action = "revealToggle:"
             self.view.addGestureRecognizer(self.revealViewController().panGestureRecognizer())
         }
+        store.synchronize()
     }
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)

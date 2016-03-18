@@ -54,6 +54,7 @@ class ViewController: UIViewController{
         }
         self.revealViewController().rearViewRevealWidth = 190
         store.removeObjectForKey("jsonData")
+        store.synchronize()
         //Calling the function that makes HealthKit authorization request
         authorizeHealthKit()
         self.welcome()
@@ -144,89 +145,89 @@ class ViewController: UIViewController{
                 // return;
             }
             else{
-            
-            let defaults = NSUserDefaults.standardUserDefaults()
-            defaults.setObject(weight, forKey: "Weight");
-            defaults.setObject(height, forKey: "Height");
-            defaults.setObject(date, forKey: "date");
-            defaults.synchronize();
-            let currentDate = NSDate()
-            let dateFormatter = NSDateFormatter()
-            dateFormatter.dateFormat = "HH:mm"
-            dateFormatter.timeStyle = .ShortStyle
-            let time = dateFormatter.stringFromDate(currentDate)
-            let currentDay = NSDate()
-            let dayFormatter = NSDateFormatter()
-            dayFormatter.dateFormat = "EEE dd,HH:mm"
-            let day = dayFormatter.stringFromDate(currentDay)
-            let myWeight = defaults.doubleForKey("Weight")
-            let myHeight = defaults.doubleForKey("Height")
-            
-            let bmi = myWeight / (myHeight * myHeight)
-            
-            
-            //Insert into table
-            
-            let postString = "day=\(day)&date=\(date), \(time)&weight=\(String(format:"%.2f",myWeight))&height=\(String(format:"%.2f",myHeight))&bmi=\(String(format:"%.2f",bmi))";
-            NSLog("PostData: %@",postString);
-            
-            
-            
-            let myURL:NSURL = NSURL(string: "http://nodeTrial.mybluemix.net/store")!
-            let request = NSMutableURLRequest(URL: myURL);
-            request.HTTPMethod = "POST"
-            request.HTTPBody = postString.dataUsingEncoding(NSUTF8StringEncoding)!
-            
-            let task = NSURLSession.sharedSession().dataTaskWithRequest(request) {
-                data, response, error in
-                if error != nil {
-                    print("error=\(error)")
-                    return
+                
+                let defaults = NSUserDefaults.standardUserDefaults()
+                defaults.setObject(weight, forKey: "Weight");
+                defaults.setObject(height, forKey: "Height");
+                defaults.setObject(date, forKey: "date");
+                defaults.synchronize();
+                let currentDate = NSDate()
+                let dateFormatter = NSDateFormatter()
+                dateFormatter.dateFormat = "HH:mm"
+                dateFormatter.timeStyle = .ShortStyle
+                let time = dateFormatter.stringFromDate(currentDate)
+                let currentDay = NSDate()
+                let dayFormatter = NSDateFormatter()
+                dayFormatter.dateFormat = "EEE dd,HH:mm"
+                let day = dayFormatter.stringFromDate(currentDay)
+                let myWeight = defaults.doubleForKey("Weight")
+                let myHeight = defaults.doubleForKey("Height")
+                
+                let bmi = myWeight / (myHeight * myHeight)
+                
+                
+                //Insert into table
+                
+                let postString = "day=\(day)&date=\(date), \(time)&weight=\(String(format:"%.2f",myWeight))&height=\(String(format:"%.2f",myHeight))&bmi=\(String(format:"%.2f",bmi))";
+                NSLog("PostData: %@",postString);
+                
+                
+                
+                let myURL:NSURL = NSURL(string: "http://nodeTrial.mybluemix.net/store")!
+                let request = NSMutableURLRequest(URL: myURL);
+                request.HTTPMethod = "POST"
+                request.HTTPBody = postString.dataUsingEncoding(NSUTF8StringEncoding)!
+                
+                let task = NSURLSession.sharedSession().dataTaskWithRequest(request) {
+                    data, response, error in
+                    if error != nil {
+                        print("error=\(error)")
+                        return
+                    }
+                    
+                    self.bmiValue.removeAll()
+                    self.dateValue.removeAll()
+                    self.lineChartView.data?.clearValues()
+                    self.viewDidLoad()
+                    dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                        
+                        self.view.reloadInputViews()
+                        self.lineChartView.reloadInputViews()
+                        self.lineChartView.animate(xAxisDuration: 0.69, yAxisDuration: 0.69, easingOption: .EaseInBounce)
+                        
+                    })
+                    if response != nil{
+                        print("Data inserted correctly")
+                    }
+                    
+                    
+                }
+                task.resume()
+                
+                self.resultText.hidden = false
+                self.labelText.text = "Your BMI is \(String(format:"%.2f",bmi))"
+                if(bmi > 18.5 && bmi < 24.9)
+                {
+                    self.resultText.text = "It is in the normal range"
+                }
+                else if(bmi > 25.0 && bmi < 30)
+                {
+                    self.resultText.text = "It is in the Over-weight range"
+                }
+                else if(bmi > 30.0 && bmi < 40)
+                {
+                    self.resultText.text = "It is in the Obese range"
+                }
+                else if(bmi > 40.0)
+                {
+                    self.resultText.text = "Your BMI is in the Morbidly Obese range"
+                }
+                else
+                {
+                    self.resultText.text = "It is in the Under-weight range"
                 }
                 
-                self.bmiValue.removeAll()
-                self.dateValue.removeAll()
-                self.lineChartView.data?.clearValues()
-                self.viewDidLoad()
-                dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                    
-                    self.view.reloadInputViews()
-                    self.lineChartView.reloadInputViews()
-                    self.lineChartView.animate(xAxisDuration: 0.69, yAxisDuration: 0.69, easingOption: .EaseInBounce)
-                    
-                })
-                if response != nil{
-                    print("Data inserted correctly")
-                }
-                
-                
-            }
-            task.resume()
-            
-            self.resultText.hidden = false
-            self.labelText.text = "Your BMI is \(String(format:"%.2f",bmi))"
-            if(bmi > 18.5 && bmi < 24.9)
-            {
-                self.resultText.text = "It is in the normal range"
-            }
-            else if(bmi > 25.0 && bmi < 30)
-            {
-                self.resultText.text = "It is in the Over-weight range"
-            }
-            else if(bmi > 30.0 && bmi < 40)
-            {
-                self.resultText.text = "It is in the Obese range"
-            }
-            else if(bmi > 40.0)
-            {
-                self.resultText.text = "Your BMI is in the Morbidly Obese range"
-            }
-            else
-            {
-                self.resultText.text = "It is in the Under-weight range"
-            }
-            
-            // Save BMI and other values with current value
+                // Save BMI and other values with current value
                 self.saveBMIValues(bmi, height: Double(height!), weight: Double(weight!), date: NSDate())
             }
             
@@ -255,20 +256,20 @@ class ViewController: UIViewController{
             self.notificationText.text = "Click on the plus sign to add your bmi data."
         }
         else{
-        for result in json.arrayValue {
-            let date = result["date"].stringValue
-            let weight = result["weight"].stringValue
-            let height = result["height"].stringValue
-            let bmi =  result["bmi"].stringValue
-            let obj = ["date": date,"weight": weight, "height": height, "bmi": bmi]
-            let dateV = result["day"].stringValue
-            objects.append(obj)
-            bmiValue.append(result["bmi"].doubleValue)
-            dateValue.append(dateV)
-            store.setObject(objects, forKey: "jsonData");
-            store.synchronize()
-            
-        }
+            for result in json.arrayValue {
+                let date = result["date"].stringValue
+                let weight = result["weight"].stringValue
+                let height = result["height"].stringValue
+                let bmi =  result["bmi"].stringValue
+                let obj = ["date": date,"weight": weight, "height": height, "bmi": bmi]
+                let dateV = result["day"].stringValue
+                objects.append(obj)
+                bmiValue.append(result["bmi"].doubleValue)
+                dateValue.append(dateV)
+                store.setObject(objects, forKey: "jsonData");
+                // store.synchronize()
+                
+            }
         }
     }
     override func didReceiveMemoryWarning() {
@@ -372,10 +373,10 @@ class ViewController: UIViewController{
             }
             if success{
                 dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                self.notificationText.hidden = false
-                self.notificationText.text = "BMI successfully saved in database and HealthKit"
+                    self.notificationText.hidden = false
+                    self.notificationText.text = "BMI successfully saved in database and HealthKit"
                 })
-                }
+            }
         })
         
     }
