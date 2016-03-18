@@ -14,7 +14,7 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "18124653D3C8CFF8AD0DB635D62D19DD"
+               BlueprintIdentifier = "797BE4AE1079DB7C62B7A29F85DAC7B3"
                BuildableName = "Pods_firstApp.framework"
                BlueprintName = "Pods-firstApp"
                ReferencedContainer = "container:Pods.xcodeproj">
@@ -45,7 +45,7 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "18124653D3C8CFF8AD0DB635D62D19DD"
+            BlueprintIdentifier = "797BE4AE1079DB7C62B7A29F85DAC7B3"
             BuildableName = "Pods_firstApp.framework"
             BlueprintName = "Pods-firstApp"
             ReferencedContainer = "container:Pods.xcodeproj">
@@ -60,15 +60,6 @@
       savedToolIdentifier = ""
       useCustomWorkingDirectory = "NO"
       debugDocumentVersioning = "YES">
-      <MacroExpansion>
-         <BuildableReference
-            BuildableIdentifier = "primary"
-            BlueprintIdentifier = "18124653D3C8CFF8AD0DB635D62D19DD"
-            BuildableName = "Pods_firstApp.framework"
-            BlueprintName = "Pods-firstApp"
-            ReferencedContainer = "container:Pods.xcodeproj">
-         </BuildableReference>
-      </MacroExpansion>
    </ProfileAction>
    <AnalyzeAction
       buildConfiguration = "Debug">
