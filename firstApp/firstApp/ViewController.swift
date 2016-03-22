@@ -72,7 +72,7 @@ class ViewController: UIViewController{
         self.navigationItem.setRightBarButtonItems([plusButtonItem,shareBarButtonItem], animated: true)
         
         //Retrieving the content of the mongo database via node.js
-        let urlString = "http://nodeTrial.mybluemix.net/retrieve"
+        let urlString = "http://dev.cs.smu.ca:4551/retrieve"
         
         
         if let url = NSURL(string: urlString){
@@ -173,7 +173,7 @@ class ViewController: UIViewController{
                 
                 
                 
-                let myURL:NSURL = NSURL(string: "http://nodeTrial.mybluemix.net/store")!
+                let myURL:NSURL = NSURL(string: "http://dev.cs.smu.ca:4551/store")!
                 let request = NSMutableURLRequest(URL: myURL);
                 request.HTTPMethod = "POST"
                 request.HTTPBody = postString.dataUsingEncoding(NSUTF8StringEncoding)!
