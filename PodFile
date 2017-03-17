@@ -5,8 +5,8 @@
 
 #Available pods
 def available_pods
-    pod 'SwiftyJSON', :git => 'https://github.com/SwiftyJSON/SwiftyJSON.git'
-    pod 'Charts', '~> 2.2.3'
+    pod 'SwiftyJSON'
+    pod 'Charts'
 end
 
 target 'BMIProj' do

@@ -1,26 +1,17 @@
 PODS:
-  - Charts (2.2.5):
-    - Charts/Core (= 2.2.5)
-  - Charts/Core (2.2.5)
+  - Charts (3.0.1):
+    - Charts/Core (= 3.0.1)
+  - Charts/Core (3.0.1)
   - SwiftyJSON (3.1.4)
 
 DEPENDENCIES:
-  - Charts (~> 2.2.3)
-  - SwiftyJSON (from `https://github.com/SwiftyJSON/SwiftyJSON.git`)
-
-EXTERNAL SOURCES:
-  SwiftyJSON:
-    :git: https://github.com/SwiftyJSON/SwiftyJSON.git
-
-CHECKOUT OPTIONS:
-  SwiftyJSON:
-    :commit: 74cda0fa5ae0be109b60a7dad396bcf92a9d5a13
-    :git: https://github.com/SwiftyJSON/SwiftyJSON.git
+  - Charts
+  - SwiftyJSON
 
 SPEC CHECKSUMS:
-  Charts: b48fcc8d7190de910ff9e9748f5360c8ea7856e5
-  SwiftyJSON: 05cf0e98a950e2ba343735264f5a96b81e755d00
+  Charts: 0e84f4418e87dad6a9edde221fba37ebb51d3ba7
+  SwiftyJSON: c2842d878f95482ffceec5709abc3d05680c0220
 
-PODFILE CHECKSUM: a56ab578d6ac4a99000c781be3497aae035ea480
+PODFILE CHECKSUM: 30704fefacafeca4b012b6b90db3d9a33bc3c259
 
 COCOAPODS: 1.2.0.beta.1

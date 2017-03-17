@@ -23,19 +23,13 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalCompressionResistancePriority="250" verticalCompressionResistancePriority="250" text="Hello." textAlignment="center" lineBreakMode="tailTruncation" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="abQ-sz-NnP">
-                                <rect key="frame" x="5" y="74" width="365" height="18"/>
+                                <rect key="frame" x="5" y="30" width="365" height="18"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                 <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="advice" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="VPO-Fd-W20">
-                                <rect key="frame" x="5" y="102" width="365" height="18"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="15"/>
-                                <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                <nil key="highlightedColor"/>
-                            </label>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Graphical Display of BMI Data" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Ceo-gF-A1F">
-                                <rect key="frame" x="21" y="140" width="333" height="40"/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" misplaced="YES" text="Graphical Display of BMI Data" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Ceo-gF-A1F">
+                                <rect key="frame" x="21" y="96" width="333" height="40"/>
                                 <color key="backgroundColor" red="0.1020983531" green="0.41564807190000003" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="40" id="fS7-I6-Wwy"/>
@@ -44,15 +38,15 @@
                                 <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Ogg-zH-h2i" customClass="LineChartView" customModule="Charts">
-                                <rect key="frame" x="21" y="180" width="333" height="250"/>
+                            <view contentMode="scaleToFill" ambiguous="YES" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Ogg-zH-h2i" customClass="LineChartView" customModule="Charts">
+                                <rect key="frame" x="21" y="136" width="333" height="250"/>
                                 <color key="backgroundColor" red="0.90196079019999997" green="0.90196079019999997" blue="0.90196079019999997" alpha="0.29552801724137934" colorSpace="custom" customColorSpace="sRGB"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="250" id="Cq6-J1-xqT"/>
                                 </constraints>
                             </view>
-                            <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="4Hi-D1-7X9">
-                                <rect key="frame" x="10" y="470" width="355" height="17"/>
+                            <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" misplaced="YES" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="4Hi-D1-7X9">
+                                <rect key="frame" x="10" y="426" width="355" height="17"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <color key="textColor" red="1" green="0.57426626390000002" blue="0.055825608610000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <nil key="highlightedColor"/>
@@ -61,14 +55,10 @@
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
                             <constraint firstAttribute="trailingMargin" secondItem="Ceo-gF-A1F" secondAttribute="trailing" constant="5" id="Amr-HY-fOL"/>
-                            <constraint firstItem="VPO-Fd-W20" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" constant="5" id="CTN-In-5CP"/>
                             <constraint firstItem="Ogg-zH-h2i" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leadingMargin" constant="5" id="LIo-vP-7TO"/>
                             <constraint firstAttribute="trailing" secondItem="abQ-sz-NnP" secondAttribute="trailing" constant="5" id="Lw0-kK-llp"/>
                             <constraint firstItem="abQ-sz-NnP" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" constant="5" id="Mum-H7-fCm"/>
                             <constraint firstItem="4Hi-D1-7X9" firstAttribute="top" secondItem="Ogg-zH-h2i" secondAttribute="bottom" constant="40" id="PUA-Q9-WPC"/>
-                            <constraint firstItem="Ceo-gF-A1F" firstAttribute="top" secondItem="VPO-Fd-W20" secondAttribute="bottom" constant="20" id="QuO-0H-XBt"/>
-                            <constraint firstAttribute="trailing" secondItem="VPO-Fd-W20" secondAttribute="trailing" constant="5" id="RBh-SL-wGN"/>
-                            <constraint firstItem="VPO-Fd-W20" firstAttribute="top" secondItem="abQ-sz-NnP" secondAttribute="bottom" constant="10" id="dOT-qK-kgC"/>
                             <constraint firstItem="Ceo-gF-A1F" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leadingMargin" constant="5" id="gpq-y5-P3K"/>
                             <constraint firstAttribute="trailingMargin" secondItem="Ogg-zH-h2i" secondAttribute="trailing" constant="5" id="jdR-d6-CL8"/>
                             <constraint firstItem="4Hi-D1-7X9" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" constant="10" id="nUY-7p-lal"/>
@@ -77,18 +67,60 @@
                             <constraint firstItem="abQ-sz-NnP" firstAttribute="top" secondItem="y3c-jy-aDJ" secondAttribute="bottom" constant="10" id="zbJ-M8-9SX"/>
                         </constraints>
                     </view>
-                    <tabBarItem key="tabBarItem" title="Graph" selectedImage="graph" id="ApC-js-oiP"/>
+                    <tabBarItem key="tabBarItem" title="Graph" image="graph" selectedImage="graph" id="ApC-js-oiP"/>
                     <navigationItem key="navigationItem" title="Home" id="rLK-1h-HUa"/>
                     <connections>
                         <outlet property="labelText" destination="abQ-sz-NnP" id="dgA-Kx-tCY"/>
                         <outlet property="lineChartView" destination="Ogg-zH-h2i" id="hpX-qb-vBH"/>
                         <outlet property="notificationText" destination="4Hi-D1-7X9" id="upe-hf-Rjw"/>
-                        <outlet property="resultText" destination="VPO-Fd-W20" id="vjJ-XB-Quo"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1870" y="-322"/>
+            <point key="canvasLocation" x="670" y="-457"/>
+        </scene>
+        <!--Suggestion-->
+        <scene sceneID="2Xq-eV-gMs">
+            <objects>
+                <viewController id="Q3x-vO-2Yc" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="1Sc-5b-ZPX"/>
+                        <viewControllerLayoutGuide type="bottom" id="nLM-Uo-SCH"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="7dK-n4-XY9">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="apC-Z0-f7c" customClass="LineChartView" customModule="Charts">
+                                <rect key="frame" x="21" y="208.5" width="333" height="250"/>
+                                <color key="backgroundColor" red="0.90196079019999997" green="0.90196079019999997" blue="0.90196079019999997" alpha="0.29552801719999999" colorSpace="custom" customColorSpace="sRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="250" id="ZEy-bD-IJU"/>
+                                </constraints>
+                            </view>
+                            <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="advice" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="fDn-vS-dmR">
+                                <rect key="frame" x="5" y="50" width="365" height="18"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                                <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstAttribute="trailingMargin" secondItem="apC-Z0-f7c" secondAttribute="trailing" constant="5" id="2Qj-IG-hmR"/>
+                            <constraint firstItem="apC-Z0-f7c" firstAttribute="leading" secondItem="7dK-n4-XY9" secondAttribute="leadingMargin" constant="5" id="9zl-4h-XF2"/>
+                            <constraint firstItem="apC-Z0-f7c" firstAttribute="centerX" secondItem="7dK-n4-XY9" secondAttribute="centerX" id="BS5-1b-aiQ"/>
+                            <constraint firstItem="fDn-vS-dmR" firstAttribute="top" secondItem="1Sc-5b-ZPX" secondAttribute="bottom" constant="30" id="Rfj-kz-axj"/>
+                            <constraint firstItem="fDn-vS-dmR" firstAttribute="leading" secondItem="7dK-n4-XY9" secondAttribute="leading" constant="5" id="Vc9-XN-ELP"/>
+                            <constraint firstAttribute="trailing" secondItem="fDn-vS-dmR" secondAttribute="trailing" constant="5" id="bf6-nd-dK4"/>
+                            <constraint firstItem="apC-Z0-f7c" firstAttribute="centerY" secondItem="7dK-n4-XY9" secondAttribute="centerY" id="l03-YF-kab"/>
+                        </constraints>
+                    </view>
+                    <tabBarItem key="tabBarItem" title="Suggestion" image="tip" id="5DU-6L-tyF"/>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="wGJ-Zp-tXl" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1354" y="209"/>
         </scene>
         <!--Tab Bar Controller-->
         <scene sceneID="pwL-Xx-T9F">
@@ -100,49 +132,14 @@
                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                     </tabBar>
                     <connections>
-                        <segue destination="gDa-pK-WE6" kind="relationship" relationship="viewControllers" id="Pkb-rK-LMp"/>
-                        <segue destination="IKa-eV-13n" kind="relationship" relationship="viewControllers" id="Ebg-Nn-rqz"/>
+                        <segue destination="BYZ-38-t0r" kind="relationship" relationship="viewControllers" id="Mtc-4R-fed"/>
+                        <segue destination="VNu-DW-f2U" kind="relationship" relationship="viewControllers" id="kJi-3C-tV3"/>
+                        <segue destination="Q3x-vO-2Yc" kind="relationship" relationship="viewControllers" id="6FR-SS-ldm"/>
                     </connections>
                 </tabBarController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="0t7-nW-nLP" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="-359" y="-322"/>
-        </scene>
-        <!--Graph-->
-        <scene sceneID="hI5-wV-Eh4">
-            <objects>
-                <navigationController storyboardIdentifier="navController" automaticallyAdjustsScrollViewInsets="NO" id="IKa-eV-13n" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="Graph" image="graph" selectedImage="graph" id="hns-Df-YNq"/>
-                    <toolbarItems/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="N9a-RO-eaO">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
-                        <autoresizingMask key="autoresizingMask"/>
-                    </navigationBar>
-                    <nil name="viewControllers"/>
-                    <connections>
-                        <segue destination="BYZ-38-t0r" kind="relationship" relationship="rootViewController" id="bsh-zm-aTW"/>
-                    </connections>
-                </navigationController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="Vp9-1g-PeK" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="769" y="-322"/>
-        </scene>
-        <!--Table-->
-        <scene sceneID="tE6-Nb-6Ya">
-            <objects>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="WmK-YA-EqJ" userLabel="First Responder" sceneMemberID="firstResponder"/>
-                <navigationController id="gDa-pK-WE6" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="Table" image="table" selectedImage="table" id="gVw-rg-29k"/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="9Pe-x7-g6c">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
-                        <autoresizingMask key="autoresizingMask"/>
-                    </navigationBar>
-                    <connections>
-                        <segue destination="VNu-DW-f2U" kind="relationship" relationship="rootViewController" id="JoM-vm-3mS"/>
-                    </connections>
-                </navigationController>
-            </objects>
-            <point key="canvasLocation" x="513" y="466"/>
         </scene>
         <!--Table View-->
         <scene sceneID="JqS-VD-v2B">
@@ -191,11 +188,12 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="mh0-XE-QWD" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1767" y="537"/>
+            <point key="canvasLocation" x="156" y="433"/>
         </scene>
     </scenes>
     <resources>
         <image name="graph" width="32" height="32"/>
         <image name="table" width="32" height="32"/>
+        <image name="tip" width="32" height="32"/>
     </resources>
 </document>

@@ -47,12 +47,9 @@ class BMIData: NSObject, NSCoding {
     func encode(with coder: NSCoder) {
         coder.encode(day, forKey: BMIDataKeys.day)
         coder.encode(date, forKey: BMIDataKeys.date)
-        coder.encode(weight.rawValue, forKey: BMIDataKeys.weight)
+        coder.encode(weight, forKey: BMIDataKeys.weight)
         coder.encode(weight, forKey: BMIDataKeys.weight)
         coder.encode(bmi, forKey: BMIDataKeys.bmi)
     }
 }
 
-struct UserDefaultKeys {
-    static let savedBMI = "savedBMI"
-}
