@@ -15,22 +15,22 @@ class DataTableView: UITableViewController{
     
     @IBOutlet weak var menuButton: UIBarButtonItem!
     
-    let store = NSUserDefaults.standardUserDefaults()
+    let store = UserDefaults.standard
     var tableObjects = [[String: String]]()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         if self.revealViewController() != nil {
             menuButton.target = self.revealViewController()
-            menuButton.action = "revealToggle:"
+            menuButton.action = #selector(SWRevealViewController.revealToggle(_:))
             self.view.addGestureRecognizer(self.revealViewController().panGestureRecognizer())
         }
         store.synchronize()
     }
-    override func viewWillAppear(animated: Bool) {
+    override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
-        dispatch_async(dispatch_get_main_queue(), { () -> Void in
+        DispatchQueue.main.async(execute: { () -> Void in
             self.tableData()
             self.animateTable()
             
@@ -40,7 +40,7 @@ class DataTableView: UITableViewController{
     
     func tableData(){
         //Retrieve data from Local Storage
-        let json = store.arrayForKey("jsonData")
+        let json = store.array(forKey: "jsonData")
         if json != nil{
             let data = JSON(json!)
             for result in data.arrayValue {
@@ -59,36 +59,36 @@ class DataTableView: UITableViewController{
         
     }
     
-    func displayMyAlertMessage(userMessage: String)
+    func displayMyAlertMessage(_ userMessage: String)
     {
-        let myAlert = UIAlertController(title: "Information", message: userMessage, preferredStyle: UIAlertControllerStyle.Alert);
-        let okAction = UIAlertAction(title: "Ok", style: UIAlertActionStyle.Default, handler: nil);
+        let myAlert = UIAlertController(title: "Information", message: userMessage, preferredStyle: UIAlertControllerStyle.alert);
+        let okAction = UIAlertAction(title: "Ok", style: UIAlertActionStyle.default, handler: nil);
         myAlert.addAction(okAction);
-        self.presentViewController(myAlert, animated: true, completion: nil);
+        self.present(myAlert, animated: true, completion: nil);
         
     }
     
-    override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return tableObjects.count;
     }
     
-    override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier("labelCell", forIndexPath: indexPath)
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "labelCell", for: indexPath)
         let object = tableObjects[indexPath.row]
         cell.textLabel!.text = object["date"]
         cell.detailTextLabel!.text = "Weight: \(object["weight"]!), Height: \(object["height"]!), BMI: \(object["bmi"]!)"
         return cell
     }
     override
-    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         print("You have selected cell \(indexPath.row)!")
         
     }
     
-    override func tableView(tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        let  headerCell:UITableViewCell = self.tableView.dequeueReusableCellWithIdentifier("labelCell")! as UITableViewCell
-        headerCell.backgroundColor = UIColor.blueColor()
-        headerCell.textLabel!.textColor = UIColor.whiteColor()
+    override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        let  headerCell:UITableViewCell = self.tableView.dequeueReusableCell(withIdentifier: "labelCell")! as UITableViewCell
+        headerCell.backgroundColor = UIColor.blue
+        headerCell.textLabel!.textColor = UIColor.white
         headerCell.textLabel!.text = ""
         headerCell.detailTextLabel!.text = ""
         return headerCell
@@ -103,15 +103,15 @@ class DataTableView: UITableViewController{
         
         for i in cells {
             let cell: UITableViewCell = i as UITableViewCell
-            cell.transform = CGAffineTransformMakeTranslation(0, tableHeight)
+            cell.transform = CGAffineTransform(translationX: 0, y: tableHeight)
         }
         
         var index = 0
         
         for a in cells {
             let cell: UITableViewCell = a as UITableViewCell
-            UIView.animateWithDuration(1.5, delay: 0.05 * Double(index), usingSpringWithDamping: 0.8, initialSpringVelocity: 0, options: UIViewAnimationOptions.CurveEaseIn, animations: {
-                cell.transform = CGAffineTransformMakeTranslation(0, 0);
+            UIView.animate(withDuration: 1.5, delay: 0.05 * Double(index), usingSpringWithDamping: 0.8, initialSpringVelocity: 0, options: UIViewAnimationOptions.curveEaseIn, animations: {
+                cell.transform = CGAffineTransform(translationX: 0, y: 0);
                 }, completion: nil)
             
             index += 1

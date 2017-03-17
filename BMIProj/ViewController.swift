@@ -24,15 +24,15 @@ class ViewController: UIViewController{
     @IBOutlet weak var lineChartView: LineChartView!
     let healthKitStore:HKHealthStore = HKHealthStore()
     
-    let store = NSUserDefaults.standardUserDefaults()
+    let store = UserDefaults.standard
     
     var cellDescriptors: NSMutableArray!
     var visibleRowsPerSection = [[Int]]()
     
     // Set the types to read and write to from HK Store
-    let weightQty = HKQuantityType.quantityTypeForIdentifier(HKQuantityTypeIdentifierBodyMass)
-    let heightQty = HKQuantityType.quantityTypeForIdentifier(HKQuantityTypeIdentifierHeight)
-    let bmiQty = HKQuantityType.quantityTypeForIdentifier(HKQuantityTypeIdentifierBodyMassIndex)
+    let weightQty = HKQuantityType.quantityType(forIdentifier: HKQuantityTypeIdentifier.bodyMass)
+    let heightQty = HKQuantityType.quantityType(forIdentifier: HKQuantityTypeIdentifier.height)
+    let bmiQty = HKQuantityType.quantityType(forIdentifier: HKQuantityTypeIdentifier.bodyMassIndex)
     
     //Declaring the table object
     var objects = [[String: String]]()
@@ -49,11 +49,11 @@ class ViewController: UIViewController{
         
         if self.revealViewController() != nil {
             menuButton.target = self.revealViewController()
-            menuButton.action = "revealToggle:"
+            menuButton.action = #selector(SWRevealViewController.revealToggle(_:))
             self.view.addGestureRecognizer(self.revealViewController().panGestureRecognizer())
         }
         self.revealViewController().rearViewRevealWidth = 190
-        store.removeObjectForKey("jsonData")
+        store.removeObject(forKey: "jsonData")
         store.synchronize()
         //Calling the function that makes HealthKit authorization request
         authorizeHealthKit()
@@ -67,16 +67,16 @@ class ViewController: UIViewController{
     }
     
     func chartData(){
-        let plusButtonItem = UIBarButtonItem(barButtonSystemItem: .Add, target: self, action: "promptForMsg")
-        let shareBarButtonItem = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.Action, target: self, action: "shareTapped")
+        let plusButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(ViewController.promptForMsg))
+        let shareBarButtonItem = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.action, target: self, action: #selector(ViewController.shareTapped))
         self.navigationItem.setRightBarButtonItems([plusButtonItem,shareBarButtonItem], animated: true)
         
         //Retrieving the content of the mongo database via node.js
-        let urlString = "http://dev.cs.smu.ca:4551/retrieve"
+        let urlString = "http://127.0.0.1:4551/retrieve"
         
         
-        if let url = NSURL(string: urlString){
-            if let data = try? NSData(contentsOfURL: url, options: []){
+        if let url = URL(string: urlString){
+            if let data = try? Data(contentsOf: url, options: []){
                 let json = JSON(data: data)
                 
                 if json != nil{
@@ -97,31 +97,31 @@ class ViewController: UIViewController{
     
     func promptForMsg()
     {
-        let ac = UIAlertController(title: "Enter Message", message: nil, preferredStyle: .Alert)
-        ac.addTextFieldWithConfigurationHandler{(textField: UITextField) in
+        let ac = UIAlertController(title: "Enter Message", message: nil, preferredStyle: .alert)
+        ac.addTextField{(textField: UITextField) in
             let datePickerView  : UIDatePicker = UIDatePicker()
-            datePickerView.datePickerMode = UIDatePickerMode.Date
+            datePickerView.datePickerMode = UIDatePickerMode.date
             textField.inputView = datePickerView
-            let currentDate = NSDate()
-            let dateFormatter = NSDateFormatter()
-            dateFormatter.dateStyle = NSDateFormatterStyle.MediumStyle
-            let strDate = dateFormatter.stringFromDate(currentDate)
+            let currentDate = Date()
+            let dateFormatter = DateFormatter()
+            dateFormatter.dateStyle = DateFormatter.Style.medium
+            let strDate = dateFormatter.string(from: currentDate)
             textField.text = strDate
             self.timeSelected = textField
             
-            datePickerView.addTarget(self, action: Selector("handleDatePicker:"), forControlEvents: UIControlEvents.ValueChanged)
+            datePickerView.addTarget(self, action: #selector(ViewController.handleDatePicker(_:)), for: UIControlEvents.valueChanged)
         }
-        ac.addTextFieldWithConfigurationHandler { (textField: UITextField!) in
-            textField.keyboardType = UIKeyboardType.DecimalPad
+        ac.addTextField { (textField: UITextField!) in
+            textField.keyboardType = UIKeyboardType.decimalPad
             textField.placeholder = "Mass (kg)"
         }
-        ac.addTextFieldWithConfigurationHandler { (textField: UITextField!) in
-            textField.keyboardType = UIKeyboardType.DecimalPad
+        ac.addTextField { (textField: UITextField!) in
+            textField.keyboardType = UIKeyboardType.decimalPad
             textField.placeholder = "Height (m)"
         }
         
         
-        let submitAction = UIAlertAction(title: "Submit", style: .Default) {
+        let submitAction = UIAlertAction(title: "Submit", style: .default) {
             
             [unowned self, ac] (action: UIAlertAction) in
             let date = String(ac.textFields![0].text!)
@@ -130,7 +130,7 @@ class ViewController: UIViewController{
             
             
             
-            if(weight == nil || height == nil || date.isEmpty)
+            if(weight == nil || height == nil || (date?.isEmpty)!)
             {
                 //Display alert Message
                 self.displayMyAlertMessage("Enter a valid number");
@@ -146,22 +146,22 @@ class ViewController: UIViewController{
             }
             else{
                 
-                let defaults = NSUserDefaults.standardUserDefaults()
-                defaults.setObject(weight, forKey: "Weight");
-                defaults.setObject(height, forKey: "Height");
-                defaults.setObject(date, forKey: "date");
+                let defaults = UserDefaults.standard
+                defaults.set(weight, forKey: "Weight");
+                defaults.set(height, forKey: "Height");
+                defaults.set(date, forKey: "date");
                 defaults.synchronize();
-                let currentDate = NSDate()
-                let dateFormatter = NSDateFormatter()
+                let currentDate = Date()
+                let dateFormatter = DateFormatter()
                 dateFormatter.dateFormat = "HH:mm"
-                dateFormatter.timeStyle = .ShortStyle
-                let time = dateFormatter.stringFromDate(currentDate)
-                let currentDay = NSDate()
-                let dayFormatter = NSDateFormatter()
+                dateFormatter.timeStyle = .short
+                let time = dateFormatter.string(from: currentDate)
+                let currentDay = Date()
+                let dayFormatter = DateFormatter()
                 dayFormatter.dateFormat = "EEE dd,HH:mm"
-                let day = dayFormatter.stringFromDate(currentDay)
-                let myWeight = defaults.doubleForKey("Weight")
-                let myHeight = defaults.doubleForKey("Height")
+                let day = dayFormatter.string(from: currentDay)
+                let myWeight = defaults.double(forKey: "Weight")
+                let myHeight = defaults.double(forKey: "Height")
                 
                 let bmi = myWeight / (myHeight * myHeight)
                 
@@ -173,12 +173,12 @@ class ViewController: UIViewController{
                 
                 
                 
-                let myURL:NSURL = NSURL(string: "http://dev.cs.smu.ca:4551/store")!
-                let request = NSMutableURLRequest(URL: myURL);
-                request.HTTPMethod = "POST"
-                request.HTTPBody = postString.dataUsingEncoding(NSUTF8StringEncoding)!
+                let myURL:URL = URL(string: "http://127.0.0.1:4551/store")!
+                let request = NSMutableURLRequest(url: myURL);
+                request.httpMethod = "POST"
+                request.httpBody = postString.data(using: String.Encoding.utf8)!
                 
-                let task = NSURLSession.sharedSession().dataTaskWithRequest(request) {
+                let task = URLSession.shared.dataTask(with: request, completionHandler: {
                     data, response, error in
                     if error != nil {
                         print("error=\(error)")
@@ -189,11 +189,11 @@ class ViewController: UIViewController{
                     self.dateValue.removeAll()
                     self.lineChartView.data?.clearValues()
                     self.viewDidLoad()
-                    dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                    DispatchQueue.main.async(execute: { () -> Void in
                         
                         self.view.reloadInputViews()
                         self.lineChartView.reloadInputViews()
-                        self.lineChartView.animate(xAxisDuration: 0.69, yAxisDuration: 0.69, easingOption: .EaseInBounce)
+                        self.lineChartView.animate(xAxisDuration: 0.69, yAxisDuration: 0.69, easingOption: .easeInBounce)
                         
                     })
                     if response != nil{
@@ -201,10 +201,10 @@ class ViewController: UIViewController{
                     }
                     
                     
-                }
+                }) 
                 task.resume()
                 
-                self.resultText.hidden = false
+                self.resultText.isHidden = false
                 self.labelText.text = "Your BMI is \(String(format:"%.2f",bmi))"
                 if(bmi > 18.5 && bmi < 24.9)
                 {
@@ -228,31 +228,31 @@ class ViewController: UIViewController{
                 }
                 
                 // Save BMI and other values with current value
-                self.saveBMIValues(bmi, height: Double(height!), weight: Double(weight!), date: NSDate())
+                self.saveBMIValues(bmi, height: Double(height!), weight: Double(weight!), date: Date())
             }
             
         }
         
         ac.addAction(submitAction)
-        let cancelAction = UIAlertAction(title: "Cancel", style: .Cancel) { (action) in
+        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel) { (action) in
         }
         ac.addAction(cancelAction)
         
-        presentViewController(ac, animated: true, completion: nil)
+        present(ac, animated: true, completion: nil)
         labelText.text = "You clicked the plus sign"
-        self.notificationText.hidden = true
+        self.notificationText.isHidden = true
     }
     
     func shareTapped(){
         let vc = SLComposeViewController(forServiceType: SLServiceTypeFacebook)
-        vc.setInitialText("\(labelText.text!),  \(resultText.text!)")
+        vc?.setInitialText("\(labelText.text!),  \(resultText.text!)")
         
-        presentViewController(vc, animated: true, completion: nil)
+        present(vc!, animated: true, completion: nil)
     }
     
-    func parseJSON(json: JSON){
+    func parseJSON(_ json: JSON){
         if(json == []){
-            self.notificationText.hidden = false
+            self.notificationText.isHidden = false
             self.notificationText.text = "Click on the plus sign to add your bmi data."
         }
         else{
@@ -266,7 +266,7 @@ class ViewController: UIViewController{
                 objects.append(obj)
                 bmiValue.append(result["bmi"].doubleValue)
                 dateValue.append(dateV)
-                store.setObject(objects, forKey: "jsonData");
+                store.set(objects, forKey: "jsonData");
                 // store.synchronize()
                 
             }
@@ -276,12 +276,12 @@ class ViewController: UIViewController{
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
-    func displayMyAlertMessage(userMessage: String)
+    func displayMyAlertMessage(_ userMessage: String)
     {
-        let myAlert = UIAlertController(title: "Information", message: userMessage, preferredStyle: UIAlertControllerStyle.Alert);
-        let okAction = UIAlertAction(title: "Ok", style: UIAlertActionStyle.Default, handler: nil);
+        let myAlert = UIAlertController(title: "Information", message: userMessage, preferredStyle: UIAlertControllerStyle.alert);
+        let okAction = UIAlertAction(title: "Ok", style: UIAlertActionStyle.default, handler: nil);
         myAlert.addAction(okAction);
-        self.presentViewController(myAlert, animated: true, completion: nil);
+        self.present(myAlert, animated: true, completion: nil);
         
     }
     
@@ -289,16 +289,16 @@ class ViewController: UIViewController{
     
     
     //Date picker formatter
-    func handleDatePicker(sender: UIDatePicker) {
-        let dateFormatter = NSDateFormatter()
+    func handleDatePicker(_ sender: UIDatePicker) {
+        let dateFormatter = DateFormatter()
         
-        dateFormatter.dateStyle = NSDateFormatterStyle.MediumStyle
-        let strDate = dateFormatter.stringFromDate(sender.date)
+        dateFormatter.dateStyle = DateFormatter.Style.medium
+        let strDate = dateFormatter.string(from: sender.date)
         timeSelected.text = strDate
     }
     
     //Chart View
-    func setChart(dataPoints: [String], values: [Double]) {
+    func setChart(_ dataPoints: [String], values: [Double]) {
         
         var dataEntries: [ChartDataEntry] = []
         
@@ -314,7 +314,7 @@ class ViewController: UIViewController{
         let lineChartData = LineChartData(xVals: dataPoints, dataSet: lineChartDataSet)
         //lineChartView.backgroundColor = UIColor(red: 252/255, green: 242/255, blue: 222/255, alpha: 1)
         
-        lineChartView.xAxis.labelPosition = .Bottom
+        lineChartView.xAxis.labelPosition = .bottom
         lineChartDataSet.colors = [UIColor(red: 230/255, green: 126/255, blue: 34/255, alpha: 1)]
         lineChartDataSet.circleColors = [UIColor(red: 230/255, green: 126/255, blue: 34/255, alpha: 1)]
         
@@ -340,8 +340,8 @@ class ViewController: UIViewController{
         
         if HKHealthStore.isHealthDataAvailable(){
             
-            self.healthKitStore.requestAuthorizationToShareTypes((toShareTypes as! Set<HKSampleType>),
-                readTypes: (readTypes as! Set<HKObjectType>),
+            self.healthKitStore.requestAuthorization(toShare: (toShareTypes as! Set<HKSampleType>),
+                read: (readTypes as! Set<HKObjectType>),
                 completion: {(success, error) -> Void in
                     if success && error == nil{
                         print("Successfully received authorization")
@@ -350,30 +350,30 @@ class ViewController: UIViewController{
         }
     }
     
-    func saveBMIValues(bmi:Double, height:Double, weight:Double, date:NSDate ) {
+    func saveBMIValues(_ bmi:Double, height:Double, weight:Double, date:Date ) {
         
-        let weightValue = HKQuantity(unit: HKUnit.gramUnitWithMetricPrefix(.Kilo),
+        let weightValue = HKQuantity(unit: HKUnit.gramUnit(with: .kilo),
             doubleValue: weight)
         
-        let heightValue = HKQuantity(unit: HKUnit.meterUnit(),
+        let heightValue = HKQuantity(unit: HKUnit.meter(),
             doubleValue: height)
-        let bmiVal = HKQuantity(unit: HKUnit.countUnit(), doubleValue: bmi)
+        let bmiVal = HKQuantity(unit: HKUnit.count(), doubleValue: bmi)
         
         // Create BMI, Height and Weight Samples
-        let weightSave = HKQuantitySample(type: self.weightQty!, quantity: weightValue, startDate: date, endDate: date)
-        let heightSave = HKQuantitySample(type: self.heightQty!, quantity: heightValue, startDate: date, endDate: date)
-        let bmiSave = HKQuantitySample(type: self.bmiQty!, quantity: bmiVal, startDate: date, endDate: date)
+        let weightSave = HKQuantitySample(type: self.weightQty!, quantity: weightValue, start: date, end: date)
+        let heightSave = HKQuantitySample(type: self.heightQty!, quantity: heightValue, start: date, end: date)
+        let bmiSave = HKQuantitySample(type: self.bmiQty!, quantity: bmiVal, start: date, end: date)
         
         // Save the sample in the store
-        self.healthKitStore.saveObjects([weightSave, heightSave, bmiSave], withCompletion: { (success, error) -> Void in
+        self.healthKitStore.save([weightSave, heightSave, bmiSave], withCompletion: { (success, error) -> Void in
             guard success else {
                 // Perform proper error handling here...
                 fatalError("*** An error occurred while saving the " +
                     "workout: \(error?.localizedDescription)")
             }
             if success{
-                dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                    self.notificationText.hidden = false
+                DispatchQueue.main.async(execute: { () -> Void in
+                    self.notificationText.isHidden = false
                     self.notificationText.text = "BMI successfully saved in database and HealthKit"
                 })
             }
@@ -382,15 +382,15 @@ class ViewController: UIViewController{
     }
     func welcome()
     {
-        let AlertOnce = NSUserDefaults.standardUserDefaults()
-        if(!AlertOnce.boolForKey("oneTimeAlert")){
+        let AlertOnce = UserDefaults.standard
+        if(!AlertOnce.bool(forKey: "oneTimeAlert")){
             
             let message = "Hi, Welcome to your BMI App, Your default screen is your graph page. Click on the menu to see your table. Have fun!!!";
-            let myAlert = UIAlertController(title: "Welcome", message: message, preferredStyle: UIAlertControllerStyle.Alert);
-            let okAction = UIAlertAction(title: "Ok", style: UIAlertActionStyle.Default, handler: nil);
+            let myAlert = UIAlertController(title: "Welcome", message: message, preferredStyle: UIAlertControllerStyle.alert);
+            let okAction = UIAlertAction(title: "Ok", style: UIAlertActionStyle.default, handler: nil);
             myAlert.addAction(okAction);
-            self.presentViewController(myAlert, animated: true, completion: nil);
-            AlertOnce.setBool(true , forKey: "oneTimeAlert");
+            self.present(myAlert, animated: true, completion: nil);
+            AlertOnce.set(true , forKey: "oneTimeAlert");
             AlertOnce.synchronize()}
         
     }
