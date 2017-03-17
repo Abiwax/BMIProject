@@ -13,19 +13,18 @@ import SwiftyJSON
 
 class DataTableView: UITableViewController{
     
-    let store = UserDefaults.standard
-    var tableObjects = [[String: String]]()
+    let bmiDataSetUp = BMIDataSetup()
+    var bmiDataSet: [BMIData] = []
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        store.synchronize()
     }
+    
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
         DispatchQueue.main.async(execute: { () -> Void in
             self.tableData()
-            self.animateTable()
             
         })
         
@@ -33,19 +32,11 @@ class DataTableView: UITableViewController{
     
     func tableData(){
         //Retrieve data from Local Storage
-        let json = store.array(forKey: "jsonData")
-        if json != nil{
-            let data = JSON(json!)
-            for result in data.arrayValue {
-                let date = result["date"].stringValue
-                let weight = result["weight"].stringValue
-                let height = result["height"].stringValue
-                let bmi =  result["bmi"].stringValue
-                let obj = ["date": date,"weight": weight, "height": height, "bmi": bmi]
-                tableObjects.append(obj)
-            }
-            
-        }else{
+        
+        self.bmiDataSetUp.loadAllBMI()
+        bmiDataSet = self.bmiDataSetUp.bmiDataSet
+        
+        if bmiDataSet.isEmpty{
             displayMyAlertMessage("There is no data to display")
         }
         tableView.reloadData()
@@ -62,14 +53,17 @@ class DataTableView: UITableViewController{
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return tableObjects.count;
+        return bmiDataSet.count;
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "labelCell", for: indexPath)
-        let object = tableObjects[indexPath.row]
-        cell.textLabel!.text = object["date"]
-        cell.detailTextLabel!.text = "Weight: \(object["weight"]!), Height: \(object["height"]!), BMI: \(object["bmi"]!)"
+        let cell = tableView.dequeueReusableCell(withIdentifier: "labelCell", for: indexPath) as! BMIViewCell
+        let object = bmiDataSet[indexPath.row]
+        cell.dateLabel.text = "\(object.day): (\(object.date))"
+        
+        cell.weightLabel!.text = "\(object.weight)kg"
+        cell.heightLabel!.text = "\(object.height)m"
+        cell.bmiLabel!.text = "\(object.bmi)"
         return cell
     }
     override
@@ -88,27 +82,5 @@ class DataTableView: UITableViewController{
     }
     
     
-    func animateTable() {
-        tableView.reloadData()
-        
-        let cells = tableView.visibleCells
-        let tableHeight: CGFloat = tableView.bounds.size.height
-        
-        for i in cells {
-            let cell: UITableViewCell = i as UITableViewCell
-            cell.transform = CGAffineTransform(translationX: 0, y: tableHeight)
-        }
-        
-        var index = 0
-        
-        for a in cells {
-            let cell: UITableViewCell = a as UITableViewCell
-            UIView.animate(withDuration: 1.5, delay: 0.05 * Double(index), usingSpringWithDamping: 0.8, initialSpringVelocity: 0, options: UIViewAnimationOptions.curveEaseIn, animations: {
-                cell.transform = CGAffineTransform(translationX: 0, y: 0);
-                }, completion: nil)
-            
-            index += 1
-        }
-        
-    }
+
 }

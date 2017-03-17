@@ -23,7 +23,10 @@ class ViewController: UIViewController{
     @IBOutlet weak var lineChartView: LineChartView!
     let healthKitStore:HKHealthStore = HKHealthStore()
     
-    let store = UserDefaults.standard
+    var dataSet: LineChartDataSet!
+    
+    let bmiDataSetUp = BMIDataSetup()
+    var bmiDataSet: [BMIData] = []
     
     var cellDescriptors: NSMutableArray!
     var visibleRowsPerSection = [[Int]]()
@@ -36,10 +39,6 @@ class ViewController: UIViewController{
     //Declaring the table object
     var objects = [[String: String]]()
     
-    //declaring the graph x and y axis
-    var dateValue = [String]()
-    var bmiValue = [Double]()
-    
     var timeSelected: UITextField!
     var justOnce:Bool = true
     
@@ -47,8 +46,6 @@ class ViewController: UIViewController{
         super.viewDidLoad()
         
         
-        store.removeObject(forKey: "jsonData")
-        store.synchronize()
         //Calling the function that makes HealthKit authorization request
         authorizeHealthKit()
         self.welcome()
@@ -56,7 +53,7 @@ class ViewController: UIViewController{
         self.chartData()
         
         //Call the method that draws the chart
-        setChart(dateValue, values: bmiValue)
+        setChart(bmiDataSet: bmiDataSet)
         
     }
     
@@ -166,7 +163,7 @@ class ViewController: UIViewController{
                 
                 
                 let myURL:URL = URL(string: "http://127.0.0.1:4551/store")!
-                let request = NSMutableURLRequest(url: myURL);
+                var request = URLRequest(url: myURL);
                 request.httpMethod = "POST"
                 request.httpBody = postString.data(using: String.Encoding.utf8)!
                 
@@ -178,8 +175,6 @@ class ViewController: UIViewController{
                         return
                     }
                     
-                    self.bmiValue.removeAll()
-                    self.dateValue.removeAll()
                     self.lineChartView.data?.clearValues()
                     self.viewDidLoad()
                     DispatchQueue.main.async(execute: { () -> Void in
@@ -226,15 +221,13 @@ class ViewController: UIViewController{
                 let weight = result["weight"].stringValue
                 let height = result["height"].stringValue
                 let bmi =  result["bmi"].stringValue
-                let obj = ["date": date,"weight": weight, "height": height, "bmi": bmi]
-                let dateV = result["day"].stringValue
-                objects.append(obj)
-                bmiValue.append(result["bmi"].doubleValue)
-                dateValue.append(dateV)
-                store.set(objects, forKey: "jsonData");
-                // store.synchronize()
+                let day = result["day"].stringValue
+                let bmiValue = BMIData(day: day, date: date, weight: weight, height: height, bmi: bmi)
+                self.bmiDataSetUp.addBMI(bmiData: bmiValue)
                 
             }
+            self.bmiDataSet = self.bmiDataSetUp.bmiDataSet
+            self.bmiDataSetUp.saveBMI()
         }
     }
     override func didReceiveMemoryWarning() {
@@ -263,27 +256,40 @@ class ViewController: UIViewController{
     }
     
     //Chart View
-    func setChart(_ dataPoints: [String], values: [Double]) {
+    func setChart(bmiDataSet: [BMIData]) {
         
-        var dataEntries: [ChartDataEntry] = []
         
-        for i in 0..<dataPoints.count {
-            let dataEntry = ChartDataEntry(x: values[i], y: Double(i))
-            dataEntries.append(dataEntry)
+//        let ll = ChartLimitLine(limit: 24.9, label: "Target")
+//        lineChartView.rightAxis.addLimitLine(ll)
+//        let lineChartDataSet = LineChartDataSet(values: dataEntries, label: "BMI Value")
+//        let lineChartData = LineChartData()
+        
+//        let lineChartData = LineChartData
+//        let lineChartData = LineChartData(xVals: dataPoints, dataSet: lineChartDataSet)
+//        //lineChartView.backgroundColor = UIColor(red: 252/255, green: 242/255, blue: 222/255, alpha: 1)
+//        
+//        lineChartView.xAxis.labelPosition = .bottom
+//        lineChartDataSet.colors = [UIColor(red: 230/255, green: 126/255, blue: 34/255, alpha: 1)]
+//        lineChartDataSet.circleColors = [UIColor(red: 230/255, green: 126/255, blue: 34/255, alpha: 1)]
+//        
+//        lineChartView.data = lineChartData
+        
+        
+        var entries: [ChartDataEntry] = Array()
+        var dateString: [String] = []
+        for bmiData in bmiDataSet
+        {
+            let index = bmiDataSet.index{$0 === bmiData}
+            entries.append(ChartDataEntry(x: Double(bmiData.bmi)!, y: Double(index!), data: bmiData.date as AnyObject?))
+//            dateString.append()
         }
         
+        dataSet = LineChartDataSet(values: entries, label: "BMI Value")
         
-        let ll = ChartLimitLine(limit: 24.9, label: "Target")
-        lineChartView.rightAxis.addLimitLine(ll)
-        let lineChartDataSet = LineChartDataSet(values: dataEntries, label: "BMI Value")
-        let lineChartData = LineChartData(xVals: dataPoints, dataSet: lineChartDataSet)
-        //lineChartView.backgroundColor = UIColor(red: 252/255, green: 242/255, blue: 222/255, alpha: 1)
-        
-        lineChartView.xAxis.labelPosition = .bottom
-        lineChartDataSet.colors = [UIColor(red: 230/255, green: 126/255, blue: 34/255, alpha: 1)]
-        lineChartDataSet.circleColors = [UIColor(red: 230/255, green: 126/255, blue: 34/255, alpha: 1)]
-        
-        lineChartView.data = lineChartData
+        lineChartView.backgroundColor = NSUIColor.clear
+        lineChartView.leftAxis.axisMinimum = 0.0
+        lineChartView.rightAxis.axisMinimum = 0.0
+        lineChartView.data = LineChartData(dataSet: dataSet)
         
     }
     

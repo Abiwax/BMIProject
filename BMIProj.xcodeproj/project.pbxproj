@@ -11,6 +11,7 @@
 		1EE172C61E7B802200EC9512 /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 1EE172C51E7B802200EC9512 /* Default-568h@2x.png */; };
 		1EE172C81E7B811300EC9512 /* BMIDataSetup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1EE172C71E7B811300EC9512 /* BMIDataSetup.swift */; };
 		1EE172CD1E7B8AFA00EC9512 /* SuggestionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1EE172CC1E7B8AFA00EC9512 /* SuggestionViewController.swift */; };
+		1EE172CF1E7B933F00EC9512 /* BMIViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1EE172CE1E7B933F00EC9512 /* BMIViewCell.swift */; };
 		2534DED51C80DC7100B1E878 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2534DED41C80DC7100B1E878 /* AppDelegate.swift */; };
 		2534DED71C80DC7100B1E878 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2534DED61C80DC7100B1E878 /* ViewController.swift */; };
 		2534DEDA1C80DC7100B1E878 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2534DED81C80DC7100B1E878 /* Main.storyboard */; };
@@ -40,6 +41,7 @@
 		1EE172C51E7B802200EC9512 /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
 		1EE172C71E7B811300EC9512 /* BMIDataSetup.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = BMIDataSetup.swift; path = Model/BMIDataSetup.swift; sourceTree = "<group>"; };
 		1EE172CC1E7B8AFA00EC9512 /* SuggestionViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SuggestionViewController.swift; path = Controllers/SuggestionViewController.swift; sourceTree = "<group>"; };
+		1EE172CE1E7B933F00EC9512 /* BMIViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = BMIViewCell.swift; path = Controllers/BMIViewCell.swift; sourceTree = "<group>"; };
 		2534DED11C80DC7100B1E878 /* BMIProj.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BMIProj.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		2534DED41C80DC7100B1E878 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		2534DED61C80DC7100B1E878 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = ViewController.swift; path = Controllers/ViewController.swift; sourceTree = "<group>"; };
@@ -82,6 +84,7 @@
 				2534DED61C80DC7100B1E878 /* ViewController.swift */,
 				25A91E1F1C941EEF00F3D84D /* DataTableView.swift */,
 				1EE172CC1E7B8AFA00EC9512 /* SuggestionViewController.swift */,
+				1EE172CE1E7B933F00EC9512 /* BMIViewCell.swift */,
 			);
 			name = Controllers;
 			sourceTree = "<group>";
@@ -271,6 +274,7 @@
 			files = (
 				2534DED71C80DC7100B1E878 /* ViewController.swift in Sources */,
 				1EE172C81E7B811300EC9512 /* BMIDataSetup.swift in Sources */,
+				1EE172CF1E7B933F00EC9512 /* BMIViewCell.swift in Sources */,
 				1EE172CD1E7B8AFA00EC9512 /* SuggestionViewController.swift in Sources */,
 				25A91E201C941EEF00F3D84D /* DataTableView.swift in Sources */,
 				1EE172C41E7B7C8400EC9512 /* BMIData.swift in Sources */,
