@@ -12,11 +12,12 @@ class BMIDataSetup {
     
     var bmiDataSet: [BMIData] = []
     
+    // add BMI to a list of BMIData
     func addBMI(bmiData: BMIData){
         bmiDataSet.append(bmiData)
-        //saveAdverts()
     }
     
+    //save all BMI data into local storage
     func saveBMI(){
         var items: [Data] = []
         for bmiData in bmiDataSet {
@@ -27,6 +28,7 @@ class BMIDataSetup {
         UserDefaults.standard.set(items, forKey: LocalDBKeys.bmiData)
     }
     
+    //get all data from 
     func loadAllBMI(){
         bmiDataSet = []
         guard let savedBMI = UserDefaults.standard.array(forKey: LocalDBKeys.bmiData) else { return }
@@ -34,6 +36,16 @@ class BMIDataSetup {
             guard let bmiData = NSKeyedUnarchiver.unarchiveObject(with: savedData as! Data) as? BMIData else { continue }
             addBMI(bmiData: bmiData)
         }
+    }
+    
+    func removeBMI(indexInArray: Int){
+        bmiDataSet.remove(at: indexInArray)
+        saveBMI()
+    }
+    
+    func removeAllBMI(){
+        bmiDataSet.removeAll()
+        saveBMI()
     }
 }
 

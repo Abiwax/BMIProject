@@ -21,6 +21,7 @@ class ViewController: UIViewController{
     @IBOutlet weak var notificationText: UILabel!
     
     @IBOutlet weak var lineChartView: LineChartView!
+    
     let healthKitStore:HKHealthStore = HKHealthStore()
     
     var dataSet: LineChartDataSet!
@@ -45,30 +46,35 @@ class ViewController: UIViewController{
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        
         //Calling the function that makes HealthKit authorization request
         authorizeHealthKit()
         self.welcome()
-        //Call the method that retrieves data
-        self.chartData()
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
         
-        //Call the method that draws the chart
-        setChart(bmiDataSet: bmiDataSet)
+        self.chartData()
         
     }
     
     func chartData(){
         let plusButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(ViewController.promptForMsg))
+        self.navigationItem.setRightBarButtonItems([plusButtonItem], animated: true)
         
+        processResult()
+        
+        
+    }
+    
+    func processResult(){
         //Retrieving the content of the mongo database via node.js
         let urlString = "http://127.0.0.1:4551/retrieve"
-        
-        
         if let url = URL(string: urlString){
             if let data = try? Data(contentsOf: url, options: []){
                 let json = JSON(data: data)
                 
-                if json != nil{
+                if !(json.null != nil){
                     parseJSON(json)
                 }else{
                     displayMyAlertMessage("Non 200 Status Code received")
@@ -81,12 +87,11 @@ class ViewController: UIViewController{
         else{
             displayMyAlertMessage("urlString was not valid URL")
         }
-        
     }
     
     func promptForMsg()
     {
-        let ac = UIAlertController(title: "Enter Message", message: nil, preferredStyle: .alert)
+        let ac = UIAlertController(title: "Enter your height and weight:", message: nil, preferredStyle: .alert)
         ac.addTextField{(textField: UITextField) in
             let datePickerView  : UIDatePicker = UIDatePicker()
             datePickerView.datePickerMode = UIDatePickerMode.date
@@ -135,11 +140,6 @@ class ViewController: UIViewController{
             }
             else{
                 
-                let defaults = UserDefaults.standard
-                defaults.set(weight, forKey: "Weight");
-                defaults.set(height, forKey: "Height");
-                defaults.set(date, forKey: "date");
-                defaults.synchronize();
                 let currentDate = Date()
                 let dateFormatter = DateFormatter()
                 dateFormatter.dateFormat = "HH:mm"
@@ -147,19 +147,15 @@ class ViewController: UIViewController{
                 let time = dateFormatter.string(from: currentDate)
                 let currentDay = Date()
                 let dayFormatter = DateFormatter()
-                dayFormatter.dateFormat = "EEE dd,HH:mm"
+                dayFormatter.dateFormat = "EEE"
                 let day = dayFormatter.string(from: currentDay)
-                let myWeight = defaults.double(forKey: "Weight")
-                let myHeight = defaults.double(forKey: "Height")
                 
-                let bmi = myWeight / (myHeight * myHeight)
+                let bmi = weight! / (height! * height!)
                 
                 
                 //Insert into table
                 
-                let postString = "day=\(day)&date=\(date), \(time)&weight=\(String(format:"%.2f",myWeight))&height=\(String(format:"%.2f",myHeight))&bmi=\(String(format:"%.2f",bmi))";
-                NSLog("PostData: %@",postString);
-                
+                let postString = "day=\(day)&date=\(date!), \(time)&weight=\(String(format:"%.2f",weight!))&height=\(String(format:"%.2f",height!))&bmi=\(String(format:"%.2f",bmi))";
                 
                 
                 let myURL:URL = URL(string: "http://127.0.0.1:4551/store")!
@@ -175,26 +171,17 @@ class ViewController: UIViewController{
                         return
                     }
                     
-                    self.lineChartView.data?.clearValues()
-                    self.viewDidLoad()
-                    DispatchQueue.main.async(execute: { () -> Void in
-                        
-                        self.view.reloadInputViews()
-                        self.lineChartView.reloadInputViews()
-                        self.lineChartView.animate(xAxisDuration: 0.69, yAxisDuration: 0.69, easingOption: .easeInBounce)
-                        
-                    })
+                    
                     if response != nil{
-                        print("Data inserted correctly")
+                        self.processResult()
+                        
                     }
-                    
-                    
                 }
                 task.resume()
                 
                 self.labelText.text = "Your BMI is \(String(format:"%.2f",bmi))"
                 // Save BMI and other values with current value
-                self.saveBMIValues(bmi, height: Double(height!), weight: Double(weight!), date: Date())
+                self.saveBMIValues(Double(bmi), height: Double(height!), weight: Double(weight!), date: Date())
             }
             
         }
@@ -205,10 +192,9 @@ class ViewController: UIViewController{
         ac.addAction(cancelAction)
         
         present(ac, animated: true, completion: nil)
-        labelText.text = "You clicked the plus sign"
+        labelText.text = "Lets begin"
         self.notificationText.isHidden = true
     }
-    
     
     func parseJSON(_ json: JSON){
         if(json == []){
@@ -216,35 +202,28 @@ class ViewController: UIViewController{
             self.notificationText.text = "Click on the plus sign to add your bmi data."
         }
         else{
+            self.bmiDataSetUp.bmiDataSet = []
             for result in json.arrayValue {
+                let id = result["_id"].stringValue
                 let date = result["date"].stringValue
                 let weight = result["weight"].stringValue
                 let height = result["height"].stringValue
                 let bmi =  result["bmi"].stringValue
                 let day = result["day"].stringValue
-                let bmiValue = BMIData(day: day, date: date, weight: weight, height: height, bmi: bmi)
+                let bmiValue = BMIData(id: id, day: day, date: date, weight: weight, height: height, bmi: bmi)
                 self.bmiDataSetUp.addBMI(bmiData: bmiValue)
                 
             }
             self.bmiDataSet = self.bmiDataSetUp.bmiDataSet
             self.bmiDataSetUp.saveBMI()
+            if !bmiDataSet.isEmpty {
+                //Call the method that draws the chart
+                setChart(bmiDataSet: bmiDataSet)
+                
+            }
+            
         }
     }
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
-    }
-    func displayMyAlertMessage(_ userMessage: String)
-    {
-        let myAlert = UIAlertController(title: "Information", message: userMessage, preferredStyle: UIAlertControllerStyle.alert);
-        let okAction = UIAlertAction(title: "Ok", style: UIAlertActionStyle.default, handler: nil);
-        myAlert.addAction(okAction);
-        self.present(myAlert, animated: true, completion: nil);
-        
-    }
-    
-    //Table View
-    
     
     //Date picker formatter
     func handleDatePicker(_ sender: UIDatePicker) {
@@ -258,30 +237,12 @@ class ViewController: UIViewController{
     //Chart View
     func setChart(bmiDataSet: [BMIData]) {
         
-        
-//        let ll = ChartLimitLine(limit: 24.9, label: "Target")
-//        lineChartView.rightAxis.addLimitLine(ll)
-//        let lineChartDataSet = LineChartDataSet(values: dataEntries, label: "BMI Value")
-//        let lineChartData = LineChartData()
-        
-//        let lineChartData = LineChartData
-//        let lineChartData = LineChartData(xVals: dataPoints, dataSet: lineChartDataSet)
-//        //lineChartView.backgroundColor = UIColor(red: 252/255, green: 242/255, blue: 222/255, alpha: 1)
-//        
-//        lineChartView.xAxis.labelPosition = .bottom
-//        lineChartDataSet.colors = [UIColor(red: 230/255, green: 126/255, blue: 34/255, alpha: 1)]
-//        lineChartDataSet.circleColors = [UIColor(red: 230/255, green: 126/255, blue: 34/255, alpha: 1)]
-//        
-//        lineChartView.data = lineChartData
-        
-        
         var entries: [ChartDataEntry] = Array()
-        var dateString: [String] = []
         for bmiData in bmiDataSet
         {
             let index = bmiDataSet.index{$0 === bmiData}
-            entries.append(ChartDataEntry(x: Double(bmiData.bmi)!, y: Double(index!), data: bmiData.date as AnyObject?))
-//            dateString.append()
+            
+            entries.append(ChartDataEntry(x: Double(index!), y: Double(bmiData.bmi)!, data: bmiData.date as AnyObject?))
         }
         
         dataSet = LineChartDataSet(values: entries, label: "BMI Value")
@@ -290,6 +251,39 @@ class ViewController: UIViewController{
         lineChartView.leftAxis.axisMinimum = 0.0
         lineChartView.rightAxis.axisMinimum = 0.0
         lineChartView.data = LineChartData(dataSet: dataSet)
+        self.lineChartView.animate(xAxisDuration: 0.69, yAxisDuration: 0.69, easingOption: .easeInBounce)
+        
+        
+    }
+    
+    func saveBMIValues(_ bmi:Double, height:Double, weight:Double, date:Date ) {
+        
+        let weightValue = HKQuantity(unit: HKUnit.gramUnit(with: .kilo),
+                                     doubleValue: weight)
+        
+        let heightValue = HKQuantity(unit: HKUnit.meter(),
+                                     doubleValue: height)
+        let bmiVal = HKQuantity(unit: HKUnit.count(), doubleValue: bmi)
+        
+        // Create BMI, Height and Weight Samples
+        let weightSave = HKQuantitySample(type: self.weightQty!, quantity: weightValue, start: date, end: date)
+        let heightSave = HKQuantitySample(type: self.heightQty!, quantity: heightValue, start: date, end: date)
+        let bmiSave = HKQuantitySample(type: self.bmiQty!, quantity: bmiVal, start: date, end: date)
+        
+        // Save the sample in the store
+        self.healthKitStore.save([weightSave, heightSave, bmiSave], withCompletion: { (success, error) -> Void in
+            guard success else {
+                // Perform proper error handling here...
+                fatalError("An error occurred while saving the " +
+                    "workout: \(error?.localizedDescription)")
+            }
+            if success{
+                DispatchQueue.main.async(execute: { () -> Void in
+                    self.notificationText.isHidden = false
+                    self.notificationText.text = "BMI successfully saved in database and HealthKit"
+                })
+            }
+        })
         
     }
     
@@ -321,42 +315,17 @@ class ViewController: UIViewController{
         }
     }
     
-    func saveBMIValues(_ bmi:Double, height:Double, weight:Double, date:Date ) {
-        
-        let weightValue = HKQuantity(unit: HKUnit.gramUnit(with: .kilo),
-                                     doubleValue: weight)
-        
-        let heightValue = HKQuantity(unit: HKUnit.meter(),
-                                     doubleValue: height)
-        let bmiVal = HKQuantity(unit: HKUnit.count(), doubleValue: bmi)
-        
-        // Create BMI, Height and Weight Samples
-        let weightSave = HKQuantitySample(type: self.weightQty!, quantity: weightValue, start: date, end: date)
-        let heightSave = HKQuantitySample(type: self.heightQty!, quantity: heightValue, start: date, end: date)
-        let bmiSave = HKQuantitySample(type: self.bmiQty!, quantity: bmiVal, start: date, end: date)
-        
-        // Save the sample in the store
-        self.healthKitStore.save([weightSave, heightSave, bmiSave], withCompletion: { (success, error) -> Void in
-            guard success else {
-                // Perform proper error handling here...
-                fatalError("*** An error occurred while saving the " +
-                    "workout: \(error?.localizedDescription)")
-            }
-            if success{
-                DispatchQueue.main.async(execute: { () -> Void in
-                    self.notificationText.isHidden = false
-                    self.notificationText.text = "BMI successfully saved in database and HealthKit"
-                })
-            }
-        })
-        
-    }
+    
+}
+
+extension UIViewController {
+    
     func welcome()
     {
         let AlertOnce = UserDefaults.standard
         if(!AlertOnce.bool(forKey: "oneTimeAlert")){
             
-            let message = "Hi, Welcome to your BMI App, Your default screen is your graph page. Click on the menu to see your table. Have fun!!!";
+            let message = "Hi, Welcome to your BMI App, Your default screen is your graph page. Click on your tabs to other options. Have fun!!!";
             let myAlert = UIAlertController(title: "Welcome", message: message, preferredStyle: UIAlertControllerStyle.alert);
             let okAction = UIAlertAction(title: "Ok", style: UIAlertActionStyle.default, handler: nil);
             myAlert.addAction(okAction);
@@ -366,5 +335,13 @@ class ViewController: UIViewController{
         
     }
     
+    func displayMyAlertMessage(_ userMessage: String)
+    {
+        let myAlert = UIAlertController(title: "Information", message: userMessage, preferredStyle: UIAlertControllerStyle.alert);
+        let okAction = UIAlertAction(title: "Ok", style: UIAlertActionStyle.default, handler: nil);
+        myAlert.addAction(okAction);
+        self.present(myAlert, animated: true, completion: nil);
+        
+    }
 }
 

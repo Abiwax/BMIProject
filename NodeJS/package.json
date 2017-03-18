@@ -1,0 +1,28 @@
+{
+  "name": "node-js-bmi",
+  "description": "A sample Node.js server using Express",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": [
+    "express",
+    "mongodb",
+    "body-parser"
+  ],
+  "engines": {
+    "node"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Abiwax/BMIProject"
+  },
+  "keywords": [
+    "node",
+    "swift",
+    "ios",
+    "express"
+  ],
+  "author": "Abisola Adeniran",
+  "license": "MIT"
+}

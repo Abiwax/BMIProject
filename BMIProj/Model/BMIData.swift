@@ -9,6 +9,7 @@
 import UIKit
 
 struct BMIDataKeys {
+    static let id = "id"
     static let day = "day"
     static let date = "date"
     static let weight = "weight"
@@ -19,6 +20,7 @@ struct BMIDataKeys {
 
 class BMIData: NSObject, NSCoding {
     
+    var id: String
     var day: String
     var date: String
     var weight: String
@@ -26,7 +28,8 @@ class BMIData: NSObject, NSCoding {
     var bmi: String
     
     
-    init(day: String, date: String, weight: String, height: String, bmi: String) {
+    init(id: String, day: String, date: String, weight: String, height: String, bmi: String) {
+        self.id = id
         self.day = day
         self.date = date
         self.weight = weight
@@ -37,6 +40,7 @@ class BMIData: NSObject, NSCoding {
     
     //required for NSCoding
     required init?(coder decoder: NSCoder) {
+        id = decoder.decodeObject(forKey: BMIDataKeys.id) as! String
         day = decoder.decodeObject(forKey: BMIDataKeys.day) as! String
         date = decoder.decodeObject(forKey: BMIDataKeys.date) as! String
         weight = decoder.decodeObject(forKey: BMIDataKeys.weight) as! String
@@ -45,10 +49,11 @@ class BMIData: NSObject, NSCoding {
     }
     
     func encode(with coder: NSCoder) {
+        coder.encode(id, forKey: BMIDataKeys.id)
         coder.encode(day, forKey: BMIDataKeys.day)
         coder.encode(date, forKey: BMIDataKeys.date)
         coder.encode(weight, forKey: BMIDataKeys.weight)
-        coder.encode(weight, forKey: BMIDataKeys.weight)
+        coder.encode(height, forKey: BMIDataKeys.height)
         coder.encode(bmi, forKey: BMIDataKeys.bmi)
     }
 }
