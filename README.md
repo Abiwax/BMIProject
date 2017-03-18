@@ -1,4 +1,4 @@
-# BMIHealthKit
+# BMIHealthKitIntegration
 IOS Version of a simple BMI Application
 
 This application is a simple BMI application that makes use of iOS HealthKit to save users BMI Data and Charts to displays it visually.
