@@ -14,12 +14,16 @@ This application is a simple BMI application that makes use of iOS HealthKit to 
 
 
 #### ScreenShots
+<div>
 <img src="/images/screenshot.png?raw=true" height="350" alt="Splash">
 <img src="/images/healthkit.png?raw=true" height="350" alt="HealthKit">
 <img src="/images/linechart.png?raw=true" height="350" alt="Line Chart View Controller">
+</div>
+<div>
 <img src="/images/prompt.png?raw=true" height="350" alt="Prompt">
 <img src="/images/table.png?raw=true" height="350" alt="Table View Controller">
 <img src="/images/simplepie.png?raw=true" height="350" alt="Suggestion View Controller">
+</div>
 <div><b>Charts credit goes to https://github.com/danielgindi/Charts</b></div>
 <div><b>Icons made by <a href="http://www.freepik.com" title="Freepik">Freepik</a> from <a href="http://www.flaticon.com" title="Flaticon">www.flaticon.com</a> is licensed by <a href="http://creativecommons.org/licenses/by/3.0/" title="Creative Commons BY 3.0" target="_blank">CC 3.0 BY</a></b></div>
 <br/>
