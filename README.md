@@ -17,8 +17,6 @@ This application is a simple BMI application that makes use of iOS HealthKit to 
 <img src="/images/screenshot.png?raw=true" height="350" alt="Splash">
 <img src="/images/healthkit.png?raw=true" height="350" alt="HealthKit">
 <img src="/images/linechart.png?raw=true" height="350" alt="Line Chart View Controller">
-<br/>
-
 <img src="/images/prompt.png?raw=true" height="350" alt="Prompt">
 <img src="/images/table.png?raw=true" height="350" alt="Table View Controller">
 <img src="/images/simplepie.png?raw=true" height="350" alt="Suggestion View Controller">
