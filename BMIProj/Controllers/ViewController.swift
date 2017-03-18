@@ -200,6 +200,8 @@ class ViewController: UIViewController{
         if(json == []){
             self.notificationText.isHidden = false
             self.notificationText.text = "Click on the plus sign to add your bmi data."
+            lineChartView.clear()
+            self.labelText.text = ""
         }
         else{
             self.bmiDataSetUp.bmiDataSet = []
@@ -216,7 +218,7 @@ class ViewController: UIViewController{
             }
             self.bmiDataSet = self.bmiDataSetUp.bmiDataSet
             self.bmiDataSetUp.saveBMI()
-            if !bmiDataSet.isEmpty {
+            if bmiDataSet.count > 0 {
                 //Call the method that draws the chart
                 setChart(bmiDataSet: bmiDataSet)
                 

@@ -36,7 +36,7 @@ class SuggestionViewController: UIViewController {
     func setupView() {
         self.bmiDataSetUp.loadAllBMI()
         bmiDataSet = self.bmiDataSetUp.bmiDataSet
-        if !bmiDataSet.isEmpty {
+        if bmiDataSet.count > 0 {
             let length = bmiDataSet.count - 1
             let bmiData: BMIData! = bmiDataSet[length]
             let bmi: Double = Double(bmiData.bmi)!
@@ -69,6 +69,7 @@ class SuggestionViewController: UIViewController {
         }
         else{
             self.resultText.text = "You currently have no BMI Data"
+            self.pieChartView.clear()
             
         }
         

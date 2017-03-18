@@ -5,13 +5,10 @@
   "scripts": {
     "start": "node server.js"
   },
-  "dependencies": [
-    "express",
-    "mongodb",
-    "body-parser"
-  ],
-  "engines": {
-    "node"
+  "dependencies": {
+    "express" : "*",
+    "mongodb" : "*",
+    "body-parser" : "*"
   },
   "repository": {
     "type": "git",
